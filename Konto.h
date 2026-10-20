@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-//w klasie brakuje funkcji oraz referencji do klasy wypożyczenie
+//w klasie brakuje funkcjonalności metody dodaj i usuń wypożyczenie
 
 class Konto {
 private:
@@ -22,11 +22,18 @@ public:
     double getKara() {
         return kara;
     }
-
     
     void dodajKare(double k) {
             kara += k;
         }
+
+    void dodajWypozyczenie() {
+        
+    }
+
+    void usunWypozyczenie() {
+       
+    }
 };
 
 #endif
