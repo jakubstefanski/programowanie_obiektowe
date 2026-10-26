@@ -103,6 +103,19 @@ public:
             cout << "Brak dostepnych samochodow o podanej nazwie." << endl;
         }
     }
+
+    void Dodajsamochod(int numer_identyfikujacy_pracownika_obslugi, Samochod auto) {
+        for (int i = 0; i < lista_pracownikow.size(); i++) {
+            if (lista_pracownikow[i].getNumerIdentyfikujacy() == numer_identyfikujacy_pracownika_obslugi) {
+                samochody.push_back(auto);
+                cout << "Pracownik o ID: " << numer_identyfikujacy_pracownika_obslugi 
+                     << " dodal samochod: " << auto.getMarka() << " " << auto.getModel() << endl;
+                return;
+            }
+        }
+        cout << "Blad: Brak uprawnien. Nie znaleziono pracownika o ID: " << numer_identyfikujacy_pracownika_obslugi << endl;
+    }
 };
+
 
 #endif
