@@ -86,9 +86,11 @@ public:
     {
         int dni = obliczDni(data_wypozyczenia, data_zwrotu);
         kwota_transakcji = 0.0;
+        kaucja_zwrotna = 0.0;
 
         for (int i = 0; i < pozycje.size(); i++) {
-            kwota_transakcji += dni * pozycje[i].getSamochod().getStawkaDobowa(); 
+            kwota_transakcji += dni * pozycje[i].getSamochod().getStawkaDobowa();
+            kaucja_zwrotna += 3 * pozycje[i].getSamochod().getStawkaDobowa();
         }
 
         return kwota_transakcji;

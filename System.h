@@ -49,38 +49,39 @@ public:
     }
 
     void Wypozycz(int numer_identyfikujacy_klienta, Samochod auto_wypozyczane, string od_kiedy, string do_kiedy) {
-    for (int i = 0; i < lista_klientow.size(); i++) {
-        if (lista_klientow[i].getNumerIdentyfikujacy() == numer_identyfikujacy_klienta) {
-            
-            for (int j = 0; j < samochody.size(); j++) {
-                if (samochody[j].getNumerVIN() == auto_wypozyczane.getNumerVIN()) {
-                    
-                    if (samochody[j].getCzyDostepny() == true) {
-                        samochody[j].setCzyDostepny(false);
-
-                        PozycjaWypozyczenia pozycja(samochody[j]);
-                        Wypozyczenie wyp(od_kiedy, do_kiedy, 500.0);
-                        wyp.dodajPozycje(pozycja);
-
-                        wyp.kalkulujCene();
-
-                        lista_klientow[i].getKonto().dodajWypozyczenie(wyp);
-                        lista_wypozyczen.push_back(wyp);
+        for (int i = 0; i < lista_klientow.size(); i++) {
+            if (lista_klientow[i].getNumerIdentyfikujacy() == numer_identyfikujacy_klienta) {
+                
+                for (int j = 0; j < samochody.size(); j++) {
+                    if (samochody[j].getNumerVIN() == auto_wypozyczane.getNumerVIN()) {
                         
-                        cout << "Wypozyczono auto na okres od " << od_kiedy << " do " << do_kiedy << "!" << endl;
-                        cout << "Cena: " << wyp.getKwota() << " zl" << endl;
-                        return;
-                    } else {
-                        cout << "Auto jest zajete!" << endl;
-                        return;
+                        if (samochody[j].getCzyDostepny() == true) {
+                            samochody[j].setCzyDostepny(false);
+
+                            PozycjaWypozyczenia pozycja(samochody[j]);
+                            Wypozyczenie wyp(od_kiedy, do_kiedy);
+                            wyp.dodajPozycje(pozycja);
+
+                            wyp.kalkulujCene();
+
+                            lista_klientow[i].getKonto().dodajWypozyczenie(wyp);
+                            lista_wypozyczen.push_back(wyp);
+                            
+                            cout << "Wypozyczono auto na okres od " << od_kiedy << " do " << do_kiedy << "!" << endl;
+                            cout << "Cena: " << wyp.getKwota() << " zl" << endl;
+                            cout << "Kaucja zwrotna: " << wyp.getKaucja() << " zl" << endl;
+                            return;
+                        } else {
+                            cout << "Auto jest zajete!" << endl;
+                            return;
+                        }
                     }
                 }
+                cout << "Nie znaleziono takiego auta!" << endl;
+                return;
             }
-            cout << "Nie znaleziono takiego auta!" << endl;
-            return;
         }
-    }
-    cout << "Nie znaleziono klienta!" << endl;
+        cout << "Nie znaleziono klienta!" << endl;
     }
 };
 
