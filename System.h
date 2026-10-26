@@ -83,6 +83,26 @@ public:
         }
         cout << "Nie znaleziono klienta!" << endl;
     }
+
+    void WyswietlListeDostepnychAutpoNazwie(Samochod tekst) {
+        cout << "Dostepne samochody dla: " << tekst.getMarka() << " " << tekst.getModel() << endl;
+        bool znaleziono = false;
+        for (int i = 0; i < samochody.size(); i++) {
+            if (samochody[i].getCzyDostepny() == true &&
+               (samochody[i].getMarka() == tekst.getMarka() || samochody[i].getModel() == tekst.getModel())) {
+                
+                cout << samochody[i].getMarka() << " " << samochody[i].getModel()
+                     << "Rocznik: " << samochody[i].getRocznik()
+                     << "VIN: " << samochody[i].getNumerVIN()
+                     << "Stawka: " << samochody[i].getStawkaDobowa() << " zl/doba" << endl;
+                znaleziono = true;
+            }
+        }
+
+        if (znaleziono == false) {
+            cout << "Brak dostepnych samochodow o podanej nazwie." << endl;
+        }
+    }
 };
 
 #endif
