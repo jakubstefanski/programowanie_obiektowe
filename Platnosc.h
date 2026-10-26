@@ -17,12 +17,6 @@ public:
         status = s;
     }
 
-    Platnosc(string data, double k, bool s) {
-        data_transakcji = data;
-        kwota = k;
-        status = s;
-    }
-
     string getDataTransakcji() { 
         return data_transakcji; 
     }
