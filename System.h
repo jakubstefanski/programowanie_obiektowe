@@ -115,6 +115,40 @@ public:
         }
         cout << "Blad: Brak uprawnien. Nie znaleziono pracownika o ID: " << numer_identyfikujacy_pracownika_obslugi << endl;
     }
+
+    void naliczKare(int numer_identyfikujacy_klienta, double kwota) {
+    if (kwota <= 0) {
+        cout << "Blad: Kwota kary musi byc wieksza od zera!" << endl;
+        return;
+    }
+
+    for (size_t i = 0; i < lista_klientow.size(); i++) {
+        if (lista_klientow[i].getNumerIdentyfikujacy() == numer_identyfikujacy_klienta) {
+            lista_klientow[i].getKonto().dodajKare(kwota);
+            cout << "Naliczono kare klinetowi o id = " << numer_identyfikujacy_klienta;
+            return;
+        }
+    }
+    cout << "Blad: Nie znaleziono klienta o ID: " << numer_identyfikujacy_klienta << "!" << endl;
+    }
+
+
+    void naliczKarePrzezPracownika(int id_pracownika, int id_klienta, double kwota) {
+    bool pracownik_istnieje = false;
+    for (size_t i = 0; i < lista_pracownikow.size(); i++) {
+        if (lista_pracownikow[i].getNumerIdentyfikujacy() == id_pracownika) {
+            pracownik_istnieje = true;
+            break;
+        }
+    }
+
+    if (!pracownik_istnieje) {
+        cout << "Blad: Brak uprawnien. Nie znaleziono pracownika o ID: " << id_pracownika << endl;
+        return;
+    }
+
+    naliczKare(id_klienta, kwota);
+    }
 };
 
 
