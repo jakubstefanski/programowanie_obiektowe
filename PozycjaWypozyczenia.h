@@ -8,15 +8,10 @@ private:
     Samochod samochod;
 
 public:
-    PozycjaWypozyczenia(Samochod s) : samochod(s) {
-    }
+    PozycjaWypozyczenia(Samochod s);
 
-    Samochod getSamochod() {
-        return samochod;
-    }
-    void setSamochod(Samochod s) {
-        samochod = s;
-    }
+    Samochod getSamochod();
+    void setSamochod(Samochod s);
 };
 
 #endif

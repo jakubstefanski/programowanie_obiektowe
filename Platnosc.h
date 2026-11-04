@@ -11,32 +11,16 @@ private:
     bool status;
 
 public:
-    Platnosc(string d, double k, bool s) {
-        data_transakcji = d;
-        kwota = k;
-        status = s;
-    }
+    Platnosc(string d, double k, bool s);
 
-    string getDataTransakcji() { 
-        return data_transakcji; 
-    }
-    void setDataTransakcji(string d) { 
-        data_transakcji = d; 
-    }
+    string getDataTransakcji();
+    void setDataTransakcji(string d);
 
-    double getKwota() { 
-        return kwota; 
-    }
-    void setKwota(double k) {
-         kwota = k; 
-    }
+    double getKwota();
+    void setKwota(double k);
 
-    bool getStatus() {
-         return status; 
-    }
-    void setStatus(bool s) { 
-        status = s; 
-    }
+    bool getStatus();
+    void setStatus(bool s);
 };
 
 #endif

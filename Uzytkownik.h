@@ -13,41 +13,19 @@ private:
     string Pesel;
 
 public:
-    Uzytkownik(string i, string n, int nr, string p) {
-        imie = i;
-        nazwisko = n;
-        numer_identyfikujacy = nr;
-        Pesel = p;
-    }
+    Uzytkownik(string i, string n, int nr, string p);
 
-    
-    string getImie() {
-        return imie;
-    }
-    void setImie(string i) {
-        imie = i;
-    }
-    
-    string getNazwisko() {
-        return nazwisko;
-    }
-    void setNazwisko(string n) {
-        nazwisko = n;
-    }
+    string getImie();
+    void setImie(string i);
 
-    int getNumerIdentyfikujacy() {
-        return numer_identyfikujacy;
-    }
-    void setNumerIdentyfikujacy(int nr) {
-        numer_identyfikujacy = nr;
-    }
+    string getNazwisko();
+    void setNazwisko(string n);
 
-    string getPesel() {
-        return Pesel;
-    }
-    void setPesel(string p) {
-        Pesel = p;
-    }
+    int getNumerIdentyfikujacy();
+    void setNumerIdentyfikujacy(int nr);
+
+    string getPesel();
+    void setPesel(string p);
 };
 
 #endif

@@ -18,104 +18,21 @@ private:
     vector<Samochod> samochody;                   
 
 public:
-    SystemRezerwacjiPojazdow() {}
+    SystemRezerwacjiPojazdow();
 
-
-    void dodajKlienta(Klient k) {
-        lista_klientow.push_back(k);
-    }
-    void dodajPracownika(PracownikObslugi p) {
-        lista_pracownikow.push_back(p);
-    }
-    void dodajWypozyczenie(Wypozyczenie w) {
-        lista_wypozyczen.push_back(w);
-    }
-    void dodajSamochod(Samochod s) {
-        samochody.push_back(s);
-    }
+    void dodajKlienta(Klient k);
+    void dodajPracownika(PracownikObslugi p);
+    void dodajWypozyczenie(Wypozyczenie w);
+    void dodajSamochod(Samochod s);
    
-    vector<Klient>& getListaKlientow() {
-        return lista_klientow;
-    }
-    vector<PracownikObslugi>& getListaPracownikow() {
-        return lista_pracownikow;
-    }
+    vector<Klient>& getListaKlientow();
+    vector<PracownikObslugi>& getListaPracownikow();
+    vector<Wypozyczenie>& getListaWypozyczen();
+    vector<Samochod>& getSamochody();
 
-    vector<Wypozyczenie>& getListaWypozyczen() {
-        return lista_wypozyczen;
-    }
-    vector<Samochod>& getSamochody() {
-        return samochody;
-    }
-
-    void Wypozycz(int numer_identyfikujacy_klienta, Samochod auto_wypozyczane, string od_kiedy, string do_kiedy) {
-        for (int i = 0; i < lista_klientow.size(); i++) {
-            if (lista_klientow[i].getNumerIdentyfikujacy() == numer_identyfikujacy_klienta) {
-                
-                for (int j = 0; j < samochody.size(); j++) {
-                    if (samochody[j].getNumerVIN() == auto_wypozyczane.getNumerVIN()) {
-                        
-                        if (samochody[j].getCzyDostepny() == true) {
-                            samochody[j].setCzyDostepny(false);
-
-                            PozycjaWypozyczenia pozycja(samochody[j]);
-                            Wypozyczenie wyp(od_kiedy, do_kiedy);
-                            wyp.dodajPozycje(pozycja);
-
-                            wyp.kalkulujCene();
-
-                            lista_klientow[i].getKonto().dodajWypozyczenie(wyp);
-                            lista_wypozyczen.push_back(wyp);
-                            
-                            cout << "Wypozyczono auto na okres od " << od_kiedy << " do " << do_kiedy << "!" << endl;
-                            cout << "Cena: " << wyp.getKwota() << " zl" << endl;
-                            cout << "Kaucja zwrotna: " << wyp.getKaucja() << " zl" << endl;
-                            return;
-                        } else {
-                            cout << "Auto jest zajete!" << endl;
-                            return;
-                        }
-                    }
-                }
-                cout << "Nie znaleziono takiego auta!" << endl;
-                return;
-            }
-        }
-        cout << "Nie znaleziono klienta!" << endl;
-    }
-
-    void WyswietlListeDostepnychAutpoNazwie(Samochod tekst) {
-        cout << "Dostepne samochody dla: " << tekst.getMarka() << " " << tekst.getModel() << endl;
-        bool znaleziono = false;
-        for (int i = 0; i < samochody.size(); i++) {
-            if (samochody[i].getCzyDostepny() == true &&
-               (samochody[i].getMarka() == tekst.getMarka() || samochody[i].getModel() == tekst.getModel())) {
-                
-                cout << samochody[i].getMarka() << " " << samochody[i].getModel()
-                     << "Rocznik: " << samochody[i].getRocznik()
-                     << "VIN: " << samochody[i].getNumerVIN()
-                     << "Stawka: " << samochody[i].getStawkaDobowa() << " zl/doba" << endl;
-                znaleziono = true;
-            }
-        }
-
-        if (znaleziono == false) {
-            cout << "Brak dostepnych samochodow o podanej nazwie." << endl;
-        }
-    }
-
-    void Dodajsamochod(int numer_identyfikujacy_pracownika_obslugi, Samochod auto) {
-        for (int i = 0; i < lista_pracownikow.size(); i++) {
-            if (lista_pracownikow[i].getNumerIdentyfikujacy() == numer_identyfikujacy_pracownika_obslugi) {
-                samochody.push_back(auto);
-                cout << "Pracownik o ID: " << numer_identyfikujacy_pracownika_obslugi 
-                     << " dodal samochod: " << auto.getMarka() << " " << auto.getModel() << endl;
-                return;
-            }
-        }
-        cout << "Blad: Brak uprawnien. Nie znaleziono pracownika o ID: " << numer_identyfikujacy_pracownika_obslugi << endl;
-    }
+    void Wypozycz(int numer_identyfikujacy_klienta, Samochod auto_wypozyczane, string od_kiedy, string do_kiedy);
+    void WyswietlListeDostepnychAutpoNazwie(Samochod tekst);
+    void Dodajsamochod(int numer_identyfikujacy_pracownika_obslugi, Samochod samochod);
 };
-
 
 #endif

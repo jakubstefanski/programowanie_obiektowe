@@ -16,64 +16,28 @@ private:
     bool czy_dostepny;
 
 public:
-    Samochod(string m, string mod, int r, string vin, bool stan, double stawka, bool dostepny) {
-        marka = m;
-        model = mod;
-        rocznik = r;
-        numer_VIN = vin;
-        stan_baku = stan;
-        stawka_dobowa = stawka;
-        czy_dostepny = dostepny;
-    }
+    Samochod(string m, string mod, int r, string vin, bool stan, double stawka, bool dostepny);
 
-    string getMarka() { 
-        return marka; 
-    }
-    void setMarka(string m) {
-         marka = m; 
-    }
+    string getMarka();
+    void setMarka(string m);
 
-    string getModel() { 
-        return model; 
-    }
-    void setModel(string mod) {
-         model = mod; 
-    }
+    string getModel();
+    void setModel(string mod);
 
-    int getRocznik() { 
-        return rocznik; 
-    }
-    void setRocznik(int r) {
-         rocznik = r; 
-    }
+    int getRocznik();
+    void setRocznik(int r);
 
-    string getNumerVIN() { 
-        return numer_VIN; 
-    }
-    void setNumerVIN(string vin) {
-         numer_VIN = vin; 
-    }
+    string getNumerVIN();
+    void setNumerVIN(string vin);
 
-    bool getStanBaku() { 
-        return stan_baku; 
-    }
-    void setStanBaku(bool stan) {
-         stan_baku = stan; 
-    }
+    bool getStanBaku();
+    void setStanBaku(bool stan);
 
-    double getStawkaDobowa() { 
-        return stawka_dobowa; 
-    }
-    void setStawkaDobowa(double stawka) {
-         stawka_dobowa = stawka; 
-        }
+    double getStawkaDobowa();
+    void setStawkaDobowa(double stawka);
 
-    bool getCzyDostepny() { 
-        return czy_dostepny; 
-    }
-    void setCzyDostepny(bool dostepny) { 
-        czy_dostepny = dostepny; 
-    }
+    bool getCzyDostepny();
+    void setCzyDostepny(bool dostepny);
 };
 
 #endif
