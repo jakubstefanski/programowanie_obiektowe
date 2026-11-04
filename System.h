@@ -33,6 +33,8 @@ public:
     void Wypozycz(int numer_identyfikujacy_klienta, Samochod auto_wypozyczane, string od_kiedy, string do_kiedy);
     void WyswietlListeDostepnychAutpoNazwie(Samochod tekst);
     void Dodajsamochod(int numer_identyfikujacy_pracownika_obslugi, Samochod samochod);
+    void naliczKare(int numer_identyfikujacy_klienta, double kwota);
+    void naliczKarePrzezPracownika(int id_pracownika, int id_klienta, double kwota);
 };
 
 #endif
