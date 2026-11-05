@@ -1,2 +1,4 @@
 Zmienić typ na enum w Wypożeczeniu w statusie
 W diagramie zmienić aby funkcja Wypozycz() w System przyjmowała też parametr od kiedy do kiedy - tak jak jest to zaimplementowane
+jak przekazujemy obiekty do metod to przez referencje
+zoptymalizować kopie
