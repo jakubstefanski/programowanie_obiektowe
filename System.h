@@ -3,10 +3,12 @@
 
 #include <iostream>
 #include <vector>
+#include <ctime>
 #include "Klient.h"
 #include "PracownikObslugi.h"
 #include "Wypozyczenie.h"
 #include "Samochod.h"
+#include "Platnosc.h"
 
 using namespace std;
 
@@ -33,6 +35,7 @@ public:
     void Wypozycz(int numer_identyfikujacy_klienta, Samochod auto_wypozyczane, string od_kiedy, string do_kiedy);
     void WyswietlListeDostepnychAutpoNazwie(Samochod tekst);
     void Dodajsamochod(int numer_identyfikujacy_pracownika_obslugi, Samochod samochod);
+    Platnosc OplacRezerwacje(Wypozyczenie& rezerwacja);
     void naliczKare(int numer_identyfikujacy_klienta, double kwota);
     void naliczKarePrzezPracownika(int id_pracownika, int id_klienta, double kwota);
 };

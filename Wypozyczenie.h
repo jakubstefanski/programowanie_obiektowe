@@ -30,6 +30,7 @@ public:
     string getdata_zwrotu();
     string getfaktdata_zwrotu();
     string getStatus();
+    void setStatus(string s);
     double getKaucja();
     double getKwota();
 

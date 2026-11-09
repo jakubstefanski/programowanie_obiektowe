@@ -102,6 +102,54 @@ void SystemRezerwacjiPojazdow::Dodajsamochod(int numer_identyfikujacy_pracownika
     cout << "Blad: Brak uprawnien. Nie znaleziono pracownika o ID: " << numer_identyfikujacy_pracownika_obslugi << endl;
 }
 
+Platnosc SystemRezerwacjiPojazdow::OplacRezerwacje(Wypozyczenie& rezerwacja) {
+    double kwota = rezerwacja.getKwota();
+    if (kwota <= 0.0) {
+        kwota = rezerwacja.kalkulujCene();
+    }
+
+    // Pobranie aktualnej daty transakcji
+    time_t t = time(nullptr);
+    tm* now = localtime(&t);
+    char buf[20];
+    strftime(buf, sizeof(buf), "%Y-%m-%d", now);
+    string data_transakcji = buf;
+
+    // Tworzenie obiektu Platnosc ze statusem powodzenia (true)
+    Platnosc platnosc(data_transakcji, kwota, true);
+
+    // Zmiana statusu rezerwacji
+    rezerwacja.setStatus("Oplacone");
+
+    // Aktualizacja statusu w liscie wypozyczen systemu (jesli rezerwacja w niej istnieje)
+    for (size_t i = 0; i < lista_wypozyczen.size(); i++) {
+        if (lista_wypozyczen[i].getdata_wypozyczenia() == rezerwacja.getdata_wypozyczenia() &&
+            lista_wypozyczen[i].getdata_zwrotu() == rezerwacja.getdata_zwrotu()) {
+            lista_wypozyczen[i].setStatus("Oplacone");
+            break;
+        }
+    }
+
+    // Aktualizacja statusu na koncie klienta
+    for (size_t i = 0; i < lista_klientow.size(); i++) {
+        vector<Wypozyczenie>& wypKlienta = lista_klientow[i].getKonto().getListaWypozyczen();
+        for (size_t j = 0; j < wypKlienta.size(); j++) {
+            if (wypKlienta[j].getdata_wypozyczenia() == rezerwacja.getdata_wypozyczenia() &&
+                wypKlienta[j].getdata_zwrotu() == rezerwacja.getdata_zwrotu()) {
+                wypKlienta[j].setStatus("Oplacone");
+                break;
+            }
+        }
+    }
+
+    cout << "Rezerwacja zostala pomyslnie oplacona." << endl;
+    cout << "Data transakcji: " << platnosc.getDataTransakcji() << endl;
+    cout << "Kwota: " << platnosc.getKwota() << " zl" << endl;
+    cout << "Status platnosci: " << (platnosc.getStatus() ? "Zatwierdzona" : "Odrzucona") << endl;
+
+    return platnosc;
+}
+
 void SystemRezerwacjiPojazdow::naliczKare(int numer_identyfikujacy_klienta, double kwota) {
     if (kwota <= 0) {
         cout << "Blad: Kwota kary musi byc wieksza od zera!" << endl;

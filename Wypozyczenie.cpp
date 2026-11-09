@@ -55,6 +55,10 @@ string Wypozyczenie::getStatus() {
     return status;
 }
 
+void Wypozyczenie::setStatus(string s) {
+    status = s;
+}
+
 double Wypozyczenie::getKaucja() {
     return kaucja_zwrotna;
 }
