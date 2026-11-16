@@ -71,16 +71,20 @@ void SystemRezerwacjiPojazdow::Wypozycz(int numer_identyfikujacy_klienta, Samoch
 }
 
 void SystemRezerwacjiPojazdow::WyswietlListeDostepnychAutpoNazwie(Samochod tekst) {
-    cout << "Dostepne samochody dla: " << tekst.getMarka() << " " << tekst.getModel() << endl;
+    if (tekst.getMarka() == tekst.getModel()) {
+        cout << "Dostepne samochody dla: " << tekst.getMarka() << endl;
+    } else {
+        cout << "Dostepne samochody dla: " << tekst.getMarka() << " " << tekst.getModel() << endl;
+    }
     bool znaleziono = false;
     for (int i = 0; i < samochody.size(); i++) {
         if (samochody[i].getCzyDostepny() == true &&
            (samochody[i].getMarka() == tekst.getMarka() || samochody[i].getModel() == tekst.getModel())) {
             
-            cout << samochody[i].getMarka() << " " << samochody[i].getModel()
-                 << "Rocznik: " << samochody[i].getRocznik()
-                 << "VIN: " << samochody[i].getNumerVIN()
-                 << "Stawka: " << samochody[i].getStawkaDobowa() << " zl/doba" << endl;
+            cout << "  - " << samochody[i].getMarka() << " " << samochody[i].getModel()
+                 << " | Rocznik: " << samochody[i].getRocznik()
+                 << " | VIN: " << samochody[i].getNumerVIN()
+                 << " | Stawka: " << samochody[i].getStawkaDobowa() << " zl/doba" << endl;
             znaleziono = true;
         }
     }
@@ -108,17 +112,15 @@ Platnosc SystemRezerwacjiPojazdow::OplacRezerwacje(Wypozyczenie& rezerwacja) {
         kwota = rezerwacja.kalkulujCene();
     }
 
-    // Pobranie aktualnej daty transakcji
+    // pobranie daty transakcji
     time_t t = time(nullptr);
     tm* now = localtime(&t);
     char buf[20];
     strftime(buf, sizeof(buf), "%Y-%m-%d", now);
     string data_transakcji = buf;
 
-    // Tworzenie obiektu Platnosc ze statusem powodzenia (true)
     Platnosc platnosc(data_transakcji, kwota, true);
 
-    // Zmiana statusu rezerwacji
     rezerwacja.setStatus("Oplacone");
 
     // Aktualizacja statusu w liscie wypozyczen systemu (jesli rezerwacja w niej istnieje)
