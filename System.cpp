@@ -152,6 +152,55 @@ Platnosc SystemRezerwacjiPojazdow::OplacRezerwacje(Wypozyczenie& rezerwacja) {
     return platnosc;
 }
 
+void SystemRezerwacjiPojazdow::oddajSamochod(int numer_identyfikujacy_klienta, Samochod auto_oddawane) {
+    for (size_t i = 0; i < lista_klientow.size(); i++) {
+        if (lista_klientow[i].getNumerIdentyfikujacy() == numer_identyfikujacy_klienta) {
+            
+            for (size_t j = 0; j < samochody.size(); j++) {
+                if (samochody[j].getNumerVIN() == auto_oddawane.getNumerVIN()) {
+                    
+                    if (samochody[j].getCzyDostepny() == false) {
+                        samochody[j].setCzyDostepny(true);
+
+                        // Aktualizacja statusu wypożyczenia na koncie klienta
+                        vector<Wypozyczenie>& wypKlienta = lista_klientow[i].getKonto().getListaWypozyczen();
+                        for (size_t k = 0; k < wypKlienta.size(); k++) {
+                            vector<PozycjaWypozyczenia>& pozycje = wypKlienta[k].getPozycje();
+                            for (size_t p = 0; p < pozycje.size(); p++) {
+                                if (pozycje[p].getSamochod().getNumerVIN() == auto_oddawane.getNumerVIN()) {
+                                    wypKlienta[k].setStatus("Zwrocone");
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Aktualizacja statusu na ogólnej liście wypożyczeń systemu
+                        for (size_t k = 0; k < lista_wypozyczen.size(); k++) {
+                            vector<PozycjaWypozyczenia>& pozycje = lista_wypozyczen[k].getPozycje();
+                            for (size_t p = 0; p < pozycje.size(); p++) {
+                                if (pozycje[p].getSamochod().getNumerVIN() == auto_oddawane.getNumerVIN()) {
+                                    lista_wypozyczen[k].setStatus("Zwrocone");
+                                    break;
+                                }
+                            }
+                        }
+
+                        cout << "Samochod " << samochody[j].getMarka() << " " << samochody[j].getModel() 
+                             << " (VIN: " << samochody[j].getNumerVIN() << ") zostal pomyslnie zwrocony." << endl;
+                        return;
+                    } else {
+                        cout << "Ten samochod nie byl wypozyczony!" << endl;
+                        return;
+                    }
+                }
+            }
+            cout << "Nie znaleziono takiego auta w systemie!" << endl;
+            return;
+        }
+    }
+    cout << "Nie znaleziono klienta!" << endl;
+}
+
 void SystemRezerwacjiPojazdow::naliczKare(int numer_identyfikujacy_klienta, double kwota) {
     if (kwota <= 0) {
         cout << "Blad: Kwota kary musi byc wieksza od zera!" << endl;
