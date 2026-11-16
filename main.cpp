@@ -27,7 +27,7 @@ int main() {
     cout << "Numer identyfikujacy: " << klient1.getNumerIdentyfikujacy() << endl;
     cout << "Pesel: " << klient1.getPesel() << endl;
     klient1.getKonto().dodajKare(50.0);
-    cout << "Akutalna kara: " << klient1.getKonto().getKara() << endl;
+    cout << "Aktualna kara: " << klient1.getKonto().getKara() << endl;
 
     // LOGOWANIE NA KONTO (przeszukiwanie wszystkich klientow w systemie)
     cout << "\n========================================" << endl;
@@ -68,6 +68,8 @@ int main() {
         cout << "========================================" << endl;
         cout << "1. Wyszukaj auto" << endl;
         cout << "2. Poznaj cene wynajmu" << endl;
+        cout << "3. Zarezerwuj / wypozycz auto" << endl;
+        cout << "4. Oplac rezerwacje" << endl;
         cout << "0. Wyjscie" << endl;
         cout << "Wybierz opcje: ";
         cin >> wybor;
@@ -118,6 +120,59 @@ int main() {
                     cout << "Wymagana kaucja zwrotna: " << kaucja << " zl" << endl;
                 } else {
                     cout << "\nBlad: Niepoprawny numer samochodu!" << endl;
+                }
+            }
+        } else if (wybor == 3) {
+            vector<Samochod>& auta = system.getSamochody();
+            if (auta.empty()) {
+                cout << "\nBrak samochodow w systemie." << endl;
+            } else {
+                cout << "\n--- LISTA SAMOCHODOW DO REZERWACJI ---" << endl;
+                for (size_t i = 0; i < auta.size(); i++) {
+                    cout << "  [" << i + 1 << "] " << auta[i].getMarka() << " " << auta[i].getModel()
+                         << " (Stawka: " << auta[i].getStawkaDobowa() << " zl/doba) - " 
+                         << (auta[i].getCzyDostepny() ? "[Dostepny]" : "[Zajety]") << endl;
+                }
+
+                int nrAuta;
+                cout << "Wybierz numer auta do rezerwacji (1-" << auta.size() << "): ";
+                cin >> nrAuta;
+
+                if (nrAuta >= 1 && nrAuta <= static_cast<int>(auta.size())) {
+                    Samochod& wybraneAuto = auta[nrAuta - 1];
+
+                    string od_kiedy, do_kiedy;
+                    cout << "Podaj date rozpoczecia wynajmu (YYYY-MM-DD): ";
+                    cin >> od_kiedy;
+                    cout << "Podaj date zakonczenia wynajmu (YYYY-MM-DD): ";
+                    cin >> do_kiedy;
+
+                    system.Wypozycz(zalogowanyKlient->getNumerIdentyfikujacy(), wybraneAuto, od_kiedy, do_kiedy);
+                } else {
+                    cout << "\nBlad: Niepoprawny numer samochodu!" << endl;
+                }
+            }
+        } else if (wybor == 4) { 
+            vector<Wypozyczenie>& wypozyczeniaKlienta = zalogowanyKlient->getKonto().getListaWypozyczen();
+            if (wypozyczeniaKlienta.empty()) {
+                cout << "\nBrak rezerwacji na Twoim koncie." << endl;
+            } else {
+                cout << "\n--- TWOJE REZERWACJE ---" << endl;
+                for (size_t i = 0; i < wypozyczeniaKlienta.size(); i++) {
+                    cout << "  [" << i + 1 << "] Od: " << wypozyczeniaKlienta[i].getdata_wypozyczenia()
+                         << " Do: " << wypozyczeniaKlienta[i].getdata_zwrotu()
+                         << " | Status: " << wypozyczeniaKlienta[i].getStatus()
+                         << " | Kwota: " << wypozyczeniaKlienta[i].getKwota() << " zl" << endl;
+                }
+
+                int nrRezerwacji;
+                cout << "Wybierz numer rezerwacji do oplacenia (1-" << wypozyczeniaKlienta.size() << "): ";
+                cin >> nrRezerwacji;
+
+                if (nrRezerwacji >= 1 && nrRezerwacji <= static_cast<int>(wypozyczeniaKlienta.size())) {
+                    system.OplacRezerwacje(wypozyczeniaKlienta[nrRezerwacji - 1]);
+                } else {
+                    cout << "\nBlad: Niepoprawny numer rezerwacji!" << endl;
                 }
             }
         } else if (wybor == 0) {
