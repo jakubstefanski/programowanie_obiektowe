@@ -67,6 +67,7 @@ int main() {
         cout << "              MENU GLOWNE               " << endl;
         cout << "========================================" << endl;
         cout << "1. Wyszukaj auto" << endl;
+        cout << "2. Poznaj cene wynajmu" << endl;
         cout << "0. Wyjscie" << endl;
         cout << "Wybierz opcje: ";
         cin >> wybor;
@@ -78,6 +79,47 @@ int main() {
             getline(cin, szukanaNazwa);
             Samochod szukany(szukanaNazwa, szukanaNazwa, 0, "", false, 0.0, false);
             system.WyswietlListeDostepnychAutpoNazwie(szukany);
+        } else if (wybor == 2) {
+            vector<Samochod>& auta = system.getSamochody();
+            if (auta.empty()) {
+                cout << "\nBrak samochodow w systemie." << endl;
+            } else {
+                cout << "\n--- LISTA SAMOCHODOW DO KALKULACJI ---" << endl;
+                for (size_t i = 0; i < auta.size(); i++) {
+                    cout << "  [" << i + 1 << "] " << auta[i].getMarka() << " " << auta[i].getModel()
+                         << " (Stawka: " << auta[i].getStawkaDobowa() << " zl/doba)" << endl;
+                }
+
+                int nrAuta;
+                cout << "Wybierz numer auta (1-" << auta.size() << "): ";
+                cin >> nrAuta;
+
+                if (nrAuta >= 1 && nrAuta <= static_cast<int>(auta.size())) {
+                    Samochod& wybraneAuto = auta[nrAuta - 1];
+
+                    string od_kiedy, do_kiedy;
+                    cout << "Podaj date rozpoczecia wynajmu (YYYY-MM-DD): ";
+                    cin >> od_kiedy;
+                    cout << "Podaj date zakonczenia wynajmu (YYYY-MM-DD): ";
+                    cin >> do_kiedy;
+
+                    PozycjaWypozyczenia pozycja(wybraneAuto);
+                    Wypozyczenie kalkulacja(od_kiedy, do_kiedy);
+                    kalkulacja.dodajPozycje(pozycja);
+
+                    double cena = kalkulacja.kalkulujCene();
+                    double kaucja = kalkulacja.getKaucja();
+
+                    cout << "       KALKULACJA CENY WYNAJMU:          " << endl;
+                    cout << "Pojazd: " << wybraneAuto.getMarka() << " " << wybraneAuto.getModel() << endl;
+                    cout << "Stawka dobowa: " << wybraneAuto.getStawkaDobowa() << " zl/doba" << endl;
+                    cout << "Okres wynajmu: " << od_kiedy << " do " << do_kiedy << endl;
+                    cout << "Szacowany koszt wynajmu: " << cena << " zl" << endl;
+                    cout << "Wymagana kaucja zwrotna: " << kaucja << " zl" << endl;
+                } else {
+                    cout << "\nBlad: Niepoprawny numer samochodu!" << endl;
+                }
+            }
         } else if (wybor == 0) {
             cout << "Wylogowano z systemu. Do widzenia!" << endl;
         } else {
