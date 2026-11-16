@@ -38,6 +38,7 @@ public:
     Platnosc OplacRezerwacje(Wypozyczenie& rezerwacja);
     void naliczKare(int numer_identyfikujacy_klienta, double kwota);
     void naliczKarePrzezPracownika(int id_pracownika, int id_klienta, double kwota);
+    void oddajSamochod(int numer_identyfikujacy_klienta, Samochod auto_oddawane);
 };
 
 #endif
