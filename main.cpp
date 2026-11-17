@@ -28,7 +28,7 @@ int main() {
     system.dodajPracownika(pracownik1);
     system.dodajPracownika(pracownik2);
 
-    //Wypożyczone akuto dla klienta 1
+    // Wypożyczone auto dla klienta 1
     system.Wypozycz(klient1.getNumerIdentyfikujacy(), auto1, "2026-11-01", "2026-11-10");
 
     cout << "Imie: " << klient1.getImie() << endl;
@@ -38,7 +38,7 @@ int main() {
     klient1.getKonto().dodajKare(50.0);
     cout << "Aktualna kara: " << klient1.getKonto().getKara() << endl;
 
-    // LOGOWANIE NA KONTO (przeszukiwanie klientow oraz pracownikow w systemie)
+    // LOGOWANIE NA KONTO
     cout << "\n========================================" << endl;
     cout << "          LOGOWANIE NA KONTO            " << endl;
     cout << "========================================" << endl;
@@ -55,7 +55,7 @@ int main() {
         cout << "Podaj PESEL: ";
         cin >> podanyPesel;
 
-        // Przeszukanie listy klientow zarejestrowanych w systemie
+        // Przeszukanie listy klientow
         vector<Klient>& klienci = system.getListaKlientow();
         for (size_t i = 0; i < klienci.size(); i++) {
             if (klienci[i].getImie() == podaneImie && klienci[i].getPesel() == podanyPesel) {
@@ -65,7 +65,7 @@ int main() {
             }
         }
 
-        // Jesli nie znaleziono wsrod klientow, przeszukanie listy pracownikow zarejestrowanych w systemie
+        // Przeszukanie listy pracownikow
         if (zalogowanyKlient == nullptr) {
             vector<PracownikObslugi>& pracownicy = system.getListaPracownikow();
             for (size_t i = 0; i < pracownicy.size(); i++) {
@@ -123,26 +123,48 @@ int main() {
                 cout << "Podaj numer identyfikacyjny klienta: ";
                 cin >> idKlienta;
 
-                vector<Samochod>& auta = system.getSamochody();
-                if (auta.empty()) {
-                    cout << "\nBrak samochodow w systemie." << endl;
+                vector<Klient>& klienci = system.getListaKlientow();
+                Klient* wybranyKlient = nullptr;
+                for (size_t i = 0; i < klienci.size(); i++) {
+                    if (klienci[i].getNumerIdentyfikujacy() == idKlienta) {
+                        wybranyKlient = &klienci[i];
+                        break;
+                    }
+                }
+
+                if (wybranyKlient == nullptr) {
+                    cout << "\nBlad: Nie znaleziono klienta o podanym numerze ID!" << endl;
                 } else {
-                    cout << "\n--- LISTA SAMOCHODOW ---" << endl;
-                    for (size_t i = 0; i < auta.size(); i++) {
-                        cout << "  [" << i + 1 << "] " << auta[i].getMarka() << " " << auta[i].getModel()
-                             << " (VIN: " << auta[i].getNumerVIN() << ") - " 
-                             << (auta[i].getCzyDostepny() ? "[Dostepny]" : "[Wypozyczony]") << endl;
+                    vector<Wypozyczenie>& wypozyczenia = wybranyKlient->getKonto().getListaWypozyczen();
+                    vector<Samochod> wypozyczoneAutaKlienta;
+
+                    for (size_t i = 0; i < wypozyczenia.size(); i++) {
+                        if (wypozyczenia[i].getStatus() != "Zwrocone") {
+                            vector<PozycjaWypozyczenia>& pozycje = wypozyczenia[i].getPozycje();
+                            for (size_t j = 0; j < pozycje.size(); j++) {
+                                wypozyczoneAutaKlienta.push_back(pozycje[j].getSamochod());
+                            }
+                        }
                     }
 
-                    int nrAuta;
-                    cout << "Wybierz numer zwracanego auta (1-" << auta.size() << "): ";
-                    cin >> nrAuta;
+                    if (wypozyczoneAutaKlienta.empty()) {
+                        cout << "\nTen klient nie ma obecnie zadnych niezwroconych pojazdow." << endl;
+                    } else {
+                        cout << "\n--- AUTA WYPOZYCZONE PRZEZ KLIENTA ---" << endl;
+                        for (size_t i = 0; i < wypozyczoneAutaKlienta.size(); i++) {
+                            cout << "  [" << i + 1 << "] " << wypozyczoneAutaKlienta[i].getMarka() << " " 
+                                 << wypozyczoneAutaKlienta[i].getModel() << " (VIN: " 
+                                 << wypozyczoneAutaKlienta[i].getNumerVIN() << ")" << endl;
+                        }
 
-                    if (nrAuta >= 1 && nrAuta <= static_cast<int>(auta.size())) {
-                        bool bylWypozyczony = !auta[nrAuta - 1].getCzyDostepny();
-                        system.oddajSamochod(idKlienta, auta[nrAuta - 1]);
+                        int nrAuta;
+                        cout << "Wybierz numer zwracanego auta (1-" << wypozyczoneAutaKlienta.size() << "): ";
+                        cin >> nrAuta;
 
-                        if (bylWypozyczony) {
+                        if (nrAuta >= 1 && nrAuta <= static_cast<int>(wypozyczoneAutaKlienta.size())) {
+                            Samochod wybraneAuto = wypozyczoneAutaKlienta[nrAuta - 1];
+                            system.oddajSamochod(idKlienta, wybraneAuto);
+
                             char czyKara;
                             cout << "Czy chcesz naliczyc kare za ten zwrot? (t/n): ";
                             cin >> czyKara;
@@ -152,9 +174,9 @@ int main() {
                                 cin >> kwotaKary;
                                 system.naliczKarePrzezPracownika(zalogowanyPracownik->getNumerIdentyfikujacy(), idKlienta, kwotaKary);
                             }
+                        } else {
+                            cout << "\nBlad: Niepoprawny numer samochodu!" << endl;
                         }
-                    } else {
-                        cout << "\nBlad: Niepoprawny numer samochodu!" << endl;
                     }
                 }
             } else if (wybor == 3) {
@@ -172,6 +194,7 @@ int main() {
                 cout << "Niepoprawna opcja! Sprobuj ponownie." << endl;
             }
         } else {
+            // MENU KLIENTA
             if (wybor == 1) {
                 string szukanaNazwa;
                 cout << "Podaj nazwe auta (marka lub model): ";
